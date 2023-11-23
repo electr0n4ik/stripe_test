@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 
 NULLABLE = {'blank': True, 'null': True}
@@ -13,10 +14,13 @@ class Item(models.Model):
         max_length=255,
         **NULLABLE,
         verbose_name='описание')
-    price = models.IntegerField(verbose_name="цена")
+    price = models.IntegerField(verbose_name="цена, $")
 
     def __str__(self):
         return f"Товар {self.name}"
+
+    def get_absolute_url(self):
+        return reverse('item-detail', args=[str(self.id)])
 
     class Meta:
         verbose_name = 'товар'
