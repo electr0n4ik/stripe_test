@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buy {{ item.name }}</title>
+    <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>
-    <h1>{{ item.name }}</h1>
-    <p>{{ item.description }}</p>
-    <p>Price: ${{ item.price }}</p>
+<h1>{{ item.name }}</h1>
+<p>{{ item.description }}</p>
+<p>Price: ${{ item.price }}</p>
+<a href="{% url 'buy_item' item.id %}">Купить</a>
 
-    <form action="/buy/{{ item.id }}" method="get">
-        <input type="submit" value="Buy">
-    </form>
 </body>
 </html>

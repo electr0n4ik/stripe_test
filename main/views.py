@@ -1,6 +1,3 @@
-import json
-import os
-
 from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
@@ -15,26 +12,22 @@ stripe.api_key = SECRET_KEY_STRIPE
 
 class BuyItemView(View):
     def get(self, request, *args, **kwargs):
-
         item = get_object_or_404(Item, id=kwargs['id'])
-        amount = int(item.price) * 100
-        currency = 'usd'
-        description = str(item.description)
-        statement_descriptor = 'OKPay'
 
-        stripe.api_key = settings.SECRET_KEY_STRIPE
-
-        # Платежный интент
         intent = stripe.PaymentIntent.create(
-            amount=amount,
-            currency=currency,
+            amount=int(item.price) * 100,
+            currency='usd',
             payment_method_types=['card'],
-            description=description,
-            statement_descriptor=statement_descriptor,
+            description=str(item.description),
+            statement_descriptor='OKPay',
         )
 
-        # client_secret из интента
-        return JsonResponse({'client_secret': intent.client_secret})
+        context = {'client_secret': intent.client_secret,
+                   'intentId': intent.id,
+                   'public_key': settings.PUBLISHABLE_KEY_STRIPE}
+
+        return render(request, 'checkout_page.html', context)
+        # return JsonResponse(context)
 
 
 class ItemDetailView(View):
@@ -42,5 +35,5 @@ class ItemDetailView(View):
         item = get_object_or_404(Item, id=id)
 
         context = {'item': item,
-                   'stripe_public_key': stripe.api_key}
+                   'stripe_public_key': settings.PUBLISHABLE_KEY_STRIPE}
         return render(request, 'item_detail.html', context)
