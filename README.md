@@ -9,7 +9,7 @@ sudo docker-compose build
 sudo docker-compose up --build
 ```
 
-## Приминение миграций и наполнение БД в запущенном докере:
+## Применение миграций и наполнение БД в запущенном докере:
 ```shell
 sudo docker-compose exec app python manage.py migrate
 sudo docker-compose exec app python manage.py put_data
