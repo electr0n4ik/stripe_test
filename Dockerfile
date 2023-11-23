@@ -3,9 +3,6 @@ FROM python:3.8
 WORKDIR /code
 
 COPY ./requirements.txt .
-COPY ./deploy.sh .
-
-RUN chmod +x ./deploy.sh
 
 RUN apt-get update
 RUN apt-get install -y build-essential libssl-dev libffi-dev
